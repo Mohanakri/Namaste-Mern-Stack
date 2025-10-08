@@ -37,5 +37,6 @@ greet.language = 'English';    //console.dir(greet);   give all function as obje
 console.log(greet.language); // Output: English
 ```
 -----------------------------------------
+* prototype 
 * promises
 * Async/wait   both comes in detailed.
