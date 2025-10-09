@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HTML vs JS vs React</title>
+
+    <!-- React core library and ReactDOM (for rendering to the real DOM) -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <!-- Babel is used so we can write JSX directly in the browser -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        padding: 40px;
+      }
+      .section {
+        border: 2px dashed #aaa;
+        margin: 20px 0;
+        padding: 20px;
+        border-radius: 10px;
+      }
+      h1 {
+        margin: 10px 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- ✅ 1️⃣ HTML SECTION -->
+    <!-- This content is written directly in HTML, already part of the DOM -->
+    <div class="section">
+      <h1>hello from HTML</h1>
+    </div>
+
+    <!-- ✅ 2️⃣ Placeholder for JavaScript DOM manipulation -->
+    <div class="section">
+      <h1 id="root1"></h1>
+    </div>
+
+    <!-- ✅ 3️⃣ Placeholder for React (without JSX) -->
+    <div class="section" id="root2"></div>
+
+    <!-- ✅ 4️⃣ Placeholder for React (with JSX) -->
+    <div class="section" id="root3"></div>
+
+    <!-- ✅ 2️⃣ Plain JavaScript DOM Example -->
+    <script type="text/javascript">
+      /*
+        document → is a Web API object provided by the browser.
+        It represents the REAL DOM tree (your actual HTML page).
+
+        Steps:
+        1. Access a real DOM element using document.getElementById().
+        2. Change its content using .innerHTML or .textContent.
+        here head1 is object
+      */
+      const head1 = document.getElementById("root1"); // get real DOM element
+      head1.innerHTML = "hello from JavaScript"; // directly modifies the element in DOM
+    </script>
+
+    <!-- ✅ 3️⃣ React Without JSX -->
+    <script type="text/javascript">
+      /*
+        React.createElement(type, props, children)
+        → creates a VIRTUAL DOM object (a plain JS object describing UI).
+
+        It's not real DOM yet. ReactDOM takes this object and converts it
+        to real HTML elements efficiently.
+
+        Example:
+        React.createElement("h1", {}, "hello from React")
+        → returns an object like:
+          { type: "h1", props: { children: "hello from React" } }
+      */
+      const reactElement = React.createElement("h1", {}, "hello from React");
+
+      /*
+        ReactDOM.createRoot() → connects React's virtual DOM to the REAL DOM.
+        It creates a root that React can control and update.
+      */
+      const root = ReactDOM.createRoot(document.getElementById("root2"));
+
+      /*
+        render() → takes that virtual element and tells ReactDOM to
+        "convert it into real DOM nodes" inside the given container.
+      */
+      root.render(reactElement);
+    </script>
+
+    <!-- ✅ 4️⃣ React With JSX -->
+    <script type="text/babel">
+      /*
+        JSX → looks like HTML, but it's actually JavaScript syntax sugar.
+        Babel converts JSX → React.createElement() calls behind the scenes.
+
+        Example:
+        <h1>Hello</h1>
+        → becomes React.createElement("h1", {}, "Hello")
+      */
+      const jsxElement = <h1>hello from React (JSX)</h1>;
+
+      const jsxRoot = ReactDOM.createRoot(document.getElementById("root3"));
+
+      jsxRoot.render(jsxElement); // same process: Virtual DOM → Real DOM
+    </script>
+  </body>
+</html>
