@@ -1,5 +1,6 @@
 # React.js Glossary - Complete Reference Guide
 
+
 ---
 
 ## **CORE CONCEPTS**
