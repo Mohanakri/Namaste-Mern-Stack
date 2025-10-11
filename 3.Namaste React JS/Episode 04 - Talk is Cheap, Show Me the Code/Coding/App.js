@@ -21,7 +21,11 @@ import ReactDOM from 'react-dom/client';
 */
 const Header = ()=>{
   return (
-    <h1>heade</h1>
+    <div className='header'>
+      food 
+
+      </div>
+    
 
   )  
   
