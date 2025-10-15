@@ -2,7 +2,190 @@
 
 ---
 
-Absolutely! Here's your **🧩 FUNCTIONS** section in the exact format you specified — clean markdown, matching the style of your **VARIABLES & DATA TYPES** table, and ready to paste into your `.md` file.
+---
+
+# 🧩 **VARIABLES & DATA TYPES**
+
+---
+
+### **var**
+
+| **Definition**  | Function-scoped variable declaration (legacy).                                          |
+| --------------- | --------------------------------------------------------------------------------------- |
+| **When to Use** | Avoid in modern code; only for legacy browser support.                                  |
+| **Remarks**     | Function-scoped, hoisted, can be redeclared causing bugs. Use `let` or `const` instead. |
+
+```javascript
+var age = 25;
+var age = 30; // allowed
+
+function test() {
+  console.log(age); // 30
+}
+```
+
+---
+
+### **let**
+
+| **Definition**  | Block-scoped variable declaration (ES6+).                             |
+| --------------- | --------------------------------------------------------------------- |
+| **When to Use** | Use when variable value will change.                                  |
+| **Remarks**     | Block-scoped, no redeclaration allowed. Has Temporal Dead Zone (TDZ). |
+
+```javascript
+let count = 0;
+count = 1; // allowed
+// let count = 2; // Error!
+
+if (true) {
+  let blockVar = 'local';
+}
+// console.log(blockVar); // Error!
+```
+
+---
+
+### **const**
+
+| **Definition**  | Block-scoped constant (cannot be reassigned).                                                          |
+| --------------- | ------------------------------------------------------------------------------------------------------ |
+| **When to Use** | Default choice when value won’t change.                                                                |
+| **Remarks**     | Prevents reassignment but objects/arrays can still be mutated. Use `Object.freeze()` for immutability. |
+
+```javascript
+const API_KEY = 'abc123';
+// API_KEY = 'xyz'; // Error!
+
+const user = { name: 'Alice' };
+user.name = 'Bob'; // OK (mutating)
+// user = {}; // Error (reassigning)
+```
+
+---
+
+### **String**
+
+| **Definition**  | Textual data enclosed in quotes.                                            |
+| --------------- | --------------------------------------------------------------------------- |
+| **When to Use** | For text, messages, names, IDs.                                             |
+| **Remarks**     | Use template literals (backticks) for interpolation and multi-line strings. |
+
+```javascript
+const greeting = "Hello World";
+const name = 'Alice';
+const message = `Hi ${name}!`;
+const multiline = `Line 1
+Line 2`;
+```
+
+---
+
+### **Number**
+
+| **Definition**  | Numeric data (integers, decimals, scientific notation).           |
+| --------------- | ----------------------------------------------------------------- |
+| **When to Use** | Calculations, counters, measurements.                             |
+| **Remarks**     | Only one number type in JS. Use `BigInt` for very large integers. |
+
+```javascript
+const age = 30;
+const price = 19.99;
+const scientific = 5e3; // 5000
+const hex = 0xFF; // 255
+const binary = 0b1010; // 10
+```
+
+---
+
+### **Boolean**
+
+| **Definition**  | Logical true/false values.                                                  |
+| --------------- | --------------------------------------------------------------------------- |
+| **When to Use** | For conditions, flags, toggles.                                             |
+| **Remarks**     | JS coerces values in conditions. Falsy: false, 0, '', null, undefined, NaN. |
+
+```javascript
+const isActive = true;
+const hasAccess = false;
+const isValid = 5 > 3; // true
+const isEmpty = !user.name;
+```
+
+---
+
+### **Undefined**
+
+| **Definition**  | Variable declared but not assigned a value.                  |
+| --------------- | ------------------------------------------------------------ |
+| **When to Use** | Default uninitialized state; checking if property exists.    |
+| **Remarks**     | JS assigns `undefined` automatically. Different from `null`. |
+
+```javascript
+let user;
+console.log(user); // undefined
+console.log(obj.missing); // undefined
+
+function noReturn() {}
+console.log(noReturn()); // undefined
+```
+
+---
+
+### **Null**
+
+| **Definition**  | Intentional absence of value (programmer-assigned).                   |
+| --------------- | --------------------------------------------------------------------- |
+| **When to Use** | Explicitly clearing values; API responses.                            |
+| **Remarks**     | `typeof null` returns `"object"` (JS quirk). Use `=== null` to check. |
+
+```javascript
+let selectedItem = null;
+const response = data ?? null;
+
+if (user === null) {
+  console.log('No user');
+}
+```
+
+---
+
+### **Symbol**
+
+| **Definition**  | Unique, immutable identifier useful as object keys. |
+| --------------- | --------------------------------------------------- |
+| **When to Use** | Creating unique property keys to avoid collisions.  |
+| **Remarks**     | Always unique; not enumerable in loops.             |
+
+```javascript
+const id = Symbol('userId');
+const id2 = Symbol('userId');
+console.log(id === id2); // false
+
+const obj = {
+  [id]: 12345,
+  name: 'Alice'
+};
+```
+
+---
+
+### **BigInt**
+
+| **Definition**  | Arbitrarily large integers beyond Number.MAX_SAFE_INTEGER.                 |
+| --------------- | -------------------------------------------------------------------------- |
+| **When to Use** | Large numbers, cryptography, precise calculations.                         |
+| **Remarks**     | Cannot mix with regular Numbers. Use `n` suffix or `BigInt()` constructor. |
+
+```javascript
+const huge = 9007199254740991n;
+const big = BigInt("12345678901234567890");
+const calc = huge + 100n;
+// const mixed = huge + 100; // Error!
+```
+
+---
+
 
 ---
 
@@ -275,26 +458,6 @@ button.addEventListener("click", () => handleClick());
 
 Would you like me to continue the **Objects, Arrays & JSON** section next — formatted in the same Markdown table + example layout?
 
-## **OBJECTS & ARRAYS**
-
-| Term | Definition & Usage | Example |
-|------|-------------------|---------|
-| **Object** | **Definition**: Collection of key-value pairs representing entities<br><br>**When to Use**: Storing related data; modeling real-world entities<br><br>**Remarks**: Everything in JS (except primitives) is an object. Passed by reference. Use for structured, related data. | javascript<br>const user = {<br>  name: "Alice",<br>  age: 30,<br>  email: "alice@example.com",<br>  greet() {<br>    return `Hi, I'm ${this.name}`;<br>  }<br>};<br> |
-| **Array** | **Definition**: Ordered list of values accessed by numeric index<br><br>**When to Use**: Lists, collections, ordered data<br><br>**Remarks**: Actually an object with numeric keys. Has built-in methods. Use for ordered collections. Zero-indexed. | javascript<br>const colors = ["red", "green", "blue"];<br>colors[0]; // "red"<br>colors.length; // 3<br>colors.push("yellow");<br>colors.pop(); // "yellow"<br> |
-| **Object Literal** | **Definition**: Direct object creation using {} notation<br><br>**When to Use**: Quick object creation; configuration objects<br><br>**Remarks**: Simple, readable syntax. ES6 added method shorthand. Use for single-use objects and configurations. | javascript<br>const book = {<br>  title: "1984",<br>  author: "Orwell",<br>  year: 1949,<br>  getSummary() {<br>    return `${this.title} by ${this.author}`;<br>  }<br>};<br> |
-| **Array Destructuring** | **Definition**: Extract array values into separate variables<br><br>**When to Use**: Unpacking values; swapping variables; function returns<br><br>**Remarks**: Cleaner than index access. Works with any iterable. Enables elegant swaps. Common in React hooks: `[state, setState]`. | javascript<br>const [first, second, ...rest] = [1, 2, 3, 4, 5];<br>// first=1, second=2, rest=[3,4,5]<br><br>// Skipping elements<br>const [a, , c] = [1, 2, 3];<br><br>// Swapping<br>[x, y] = [y, x];<br><br>// With defaults<br>const [val = 10] = [];<br> |
-| **Object Destructuring** | **Definition**: Extract object properties into variables<br><br>**When to Use**: Function parameters; extracting API data; imports<br><br>**Remarks**: Reduces boilerplate. Works with nested objects. Combine with default values. Commonly used in React props, API responses. | javascript<br>const user = {<br>  name: 'Alice',<br>  age: 30,<br>  city: 'NYC'<br>};<br>const { name, age, city = 'Unknown' } = user;<br><br>// Renaming<br>const { name: userName } = user;<br><br>// Nested<br>const { address: { street } } = person;<br><br>// Function params<br>function greet({ name, age }) {<br>  return `${name} is ${age}`;<br>}<br> |
-| **Spread Operator** | **Definition**: Expands iterables or copies objects/arrays<br><br>**When to Use**: Copying, merging, passing array as arguments<br><br>**Remarks**: Creates shallow copy. Nested objects are still referenced. For deep copy, use `structuredClone()` or libraries. | javascript<br>const arr = [1, 2, 3];<br>const copy = [...arr];<br>const merged = [...arr1, ...arr2];<br><br>const obj = { name: 'Alice' };<br>const updated = {<br>  ...obj,<br>  age: 30,<br>  name: 'Bob' // overwrites<br>};<br><br>Math.max(...numbers);<br> |
-| **Property Shorthand** | **Definition**: Concise syntax when key matches variable name<br><br>**When to Use**: Reducing boilerplate; cleaner object literals<br><br>**Remarks**: Reduces repetition. Very common in modern JS. Works with destructuring too. | javascript<br>const name = "Bob";<br>const age = 25;<br><br>// Old way<br>const person1 = {<br>  name: name,<br>  age: age<br>};<br><br>// ES6 shorthand<br>const person2 = { name, age };<br> |
-| **Computed Property** | **Definition**: Dynamic property names using []<br><br>**When to Use**: Dynamic keys; creating objects programmatically<br><br>**Remarks**: Enables dynamic property names at creation time. Before ES6, had to create object first, then add property. | javascript<br>const propName = "score";<br>const game = {<br>  [propName]: 100,<br>  [`level_${2}`]: "hard",<br>  [Symbol('id')]: 123<br>};<br><br>// Dynamic object creation<br>const key = getUserInput();<br>const obj = { [key]: value };<br> |
-
----
-
-Perfect — here's your **🧱 OBJECTS & ARRAYS** section, reformatted in the same clean markdown style you've used for **VARIABLES & DATA TYPES** and **FUNCTIONS**.
-
-You can paste this directly into your `.md` file. ✅
-
----
 
 # 🧱 **OBJECTS & ARRAYS**
 
@@ -2052,52 +2215,505 @@ const config = {
 
 ✅ Want all cheat sheets combined into a **single document (PDF or Markdown)** with navigation and styling? Let me know — I can generate and format it for easy printing or digital reference.
 
-## **ES6+ FEATURES QUICK REFERENCE**
-
-| Feature | Definition & Usage | Example |
-|---------|-------------------|---------|
-| **let/const** | **Definition**: Block-scoped variables<br><br>**When to Use**: Always (replace var)<br><br>**Remarks**: Use `const` by default, `let` when reassignment needed. Never use `var`. Default choice. | javascript<br>const MAX = 100; // won't change<br>let count = 0; // will change<br><br>if (true) {<br>  let blockScoped = 'local';<br>  const alsoBlock = 'local';<br>}<br>// console.log(blockScoped); // Error<br> |
-| **Arrow Functions** | **Definition**: Concise function syntax<br><br>**When to Use**: Callbacks, short functions, lexical this<br><br>**Remarks**: Inherits `this` from parent. No `arguments` object. Can't be constructor. Lexical this. | javascript<br>// One parameter<br>const double = x => x * 2;<br><br>// Multiple parameters<br>const add = (a, b) => a + b;<br><br>// Block body<br>const complex = (x) => {<br>  const result = x * 2;<br>  return result + 1;<br>};<br><br>// Returning object (wrap in parens)<br>const makeUser = name => ({<br>  name,<br>  active: true<br>});<br> |
-| **Spread/Rest** | **Definition**: Expand/collect elements<br><br>**When to Use**: Copying, merging, function args<br><br>**Remarks**: Context determines meaning. Rest must be last parameter. Shallow copy only. Versatile. | javascript<br>// Spread in arrays<br>const merged = [...arr1, ...arr2];<br>const copy = [...original];<br><br>// Spread in objects<br>const updated = { ...user, age: 31 };<br><br>// Rest in functions<br>function sum(...numbers) {<br>  return numbers.reduce((a, b) => a + b, 0);<br>}<br><br>// Rest in destructuring<br>const [first, ...rest] = [1, 2, 3, 4];<br>const { name, ...otherProps } = user;<br> |
-| **Map/Set** | **Definition**: Better data structures<br><br>**When to Use**: Unique values, key-value with any key type<br><br>**Remarks**: Map preserves key order, allows any key type. Set ensures uniqueness. Both iterable. Better than objects. | javascript<br>// Set - unique values<br>const unique = new Set([1, 2, 2, 3]);<br>// {1, 2, 3}<br>unique.add(4);<br>unique.has(2); // true<br>unique.size; // 4<br><br>// Map - any key type<br>const map = new Map();<br>map.set('name', 'Alice');<br>map.set(obj, 'value'); // object as key!<br>map.get('name'); // 'Alice'<br>map.size; // 2<br><br>// Iteration<br>for (const [key, value] of map) {<br>  console.log(key, value);<br>}<br> |
-| **for...of** | **Definition**: Iterate over values<br><br>**When to Use**: Arrays, strings, iterables<br><br>**Remarks**: Cleaner than `for` loop. Gets values, not indices. Works with any iterable. Use `for...in` for object keys (but prefer `Object.keys()`). Modern iteration. | javascript<br>// Array<br>for (const item of [1, 2, 3]) {<br>  console.log(item); // 1, 2, 3<br>}<br><br>// String<br>for (const char of 'hello') {<br>  console.log(char); // h, e, l, l, o<br>}<br><br>// Map<br>for (const [key, value] of map) {<br>  console.log(key, value);<br>}<br><br>// Can use break/continue<br>for (const item of items) {<br>  if (item > 10) break;<br>  console.log(item);<br>}<br> |
+Here’s your **ES6+ FEATURES QUICK REFERENCE**, rewritten in the same clean, modular format as the previous sections. Designed for quick scanning, retention, and practical application:
 
 ---
 
-## **DEBUGGING & TESTING**
-
-| Tool/Method | Definition & Usage | Example |
-|-------------|-------------------|---------|
-| **console.log()** | **Definition**: Print values to console<br><br>**When to Use**: Basic debugging, checking values<br><br>**Remarks**: Simple but effective. Use object shorthand for multiple variables. Remove before production. Most common. | javascript<br>console.log('value:', x);<br><br>// Multiple values<br>console.log('User:', user, 'Count:', count);<br><br>// Object shorthand<br>console.log({ user, posts, comments });<br><br>// Styled output<br>console.log('%c Important!',<br>  'color: red; font-size: 20px');<br> |
-| **console.table()** | **Definition**: Display arrays/objects as table<br><br>**When to Use**: Viewing structured data<br><br>**Remarks**: Great for arrays of objects. Shows in tabular format. More readable than log. Readable format. | javascript<br>const users = [<br>  { id: 1, name: 'Alice', age: 30 },<br>  { id: 2, name: 'Bob', age: 25 },<br>  { id: 3, name: 'Charlie', age: 35 }<br>];<br><br>console.table(users);<br><br>// Select columns<br>console.table(users, ['name', 'age']);<br> |
-| **debugger** | **Definition**: Pause execution for debugging<br><br>**When to Use**: Complex debugging, inspecting state<br><br>**Remarks**: Pauses execution in DevTools. Inspect variables, step through code. Remember to remove before production. Powerful. | javascript<br>function calculate(x, y) {<br>  debugger; // Execution pauses here<br>  const result = x * y;<br>  return result + 10;<br>}<br><br>// Conditional debugging<br>if (user.role === 'admin') {<br>  debugger;<br>}<br> |
-| **console.assert()** | **Definition**: Log if assertion fails<br><br>**When to Use**: Validation, testing assumptions<br><br>**Remarks**: Only logs if assertion fails. Doesn't stop execution. Good for development checks. Quick checks. | javascript<br>console.assert(x > 0, 'x must be positive');<br>console.assert(<br>  Array.isArray(data),<br>  'data must be array'<br>);<br><br>function divide(a, b) {<br>  console.assert(b !== 0, 'Division by zero!');<br>  return a / b;<br>}<br> |
-| **console.trace()** | **Definition**: Show stack trace<br><br>**When to Use**: Tracking function calls<br><br>**Remarks**: Shows function call chain. Useful for understanding code flow. Helps find where function is called from. Call stack. | javascript<br>function a() {<br>  b();<br>}<br><br>function b() {<br>  c();<br>}<br><br>function c() {<br>  console.trace('How did we get here?');<br>}<br><br>a(); // Shows: c -> b -> a<br> |
-| **Performance Measurement** | **Definition**: Measure execution time<br><br>**When to Use**: Optimization, finding bottlenecks<br><br>**Remarks**: Identifies slow operations. Use `performance.now()` for precise timing. Browser DevTools have advanced profilers. Performance profiling. | javascript<br>// console.time/timeEnd<br>console.time('myOperation');<br>expensiveOperation();<br>console.timeEnd('myOperation');<br>// myOperation: 234ms<br><br>// performance.now()<br>const start = performance.now();<br>doSomething();<br>const end = performance.now();<br>console.log(`Took ${end - start}ms`);<br><br>// Multiple measurements<br>console.time('fetch');<br>await fetchData();<br>console.timeEnd('fetch');<br><br>console.time('process');<br>processData();<br>console.timeEnd('process');<br> |
+# 🚀 **ES6+ FEATURES QUICK REFERENCE**
 
 ---
 
-## **COMMON GOTCHAS & PITFALLS**
+### **let / const**
 
-| Issue | Why It Happens & Solution | Example |
-|-------|---------------------------|---------|
-| **Type Coercion** | **Why**: `==` performs type conversion<br><br>**Solution**: Always use `===` | javascript<br>// Bad<br>0 == false; // true<br>"" == false; // true<br><br>// Good<br>0 === false; // false<br>"" === false; // false<br> |
-| **`this` binding** | **Why**: `this` depends on how function is called<br><br>**Solution**: Use arrow functions or `.bind()` | javascript<br>// Problem<br>const obj = {<br>  name: 'Test',<br>  greet: function() {<br>    setTimeout(function() {<br>      console.log(this.name); // undefined<br>    }, 100);<br>  }<br>};<br><br>// Solution 1: Arrow function<br>greet: function() {<br>  setTimeout(() => {<br>    console.log(this.name); // works!<br>  }, 100);<br>}<br><br>// Solution 2: bind<br>setTimeout(function() {<br>  console.log(this.name);<br>}.bind(this), 100);<br> |
-| **Array/Object Mutation** | **Why**: References, not copies<br><br>**Solution**: Use spread or proper copy methods | javascript<br>// Problem<br>const original = [1, 2, 3];<br>const copy = original;<br>copy.push(4);<br>console.log(original);<br>// [1, 2, 3, 4] - mutated!<br><br>// Solution<br>const copy = [...original]; // shallow<br>const deepCopy = structuredClone(original);<br> |
-| **Floating Point** | **Why**: Binary representation imprecision<br><br>**Solution**: Use toFixed() or libraries | javascript<br>// Problem<br>0.1 + 0.2; // 0.30000000000000004<br><br>// Solution<br>(0.1 + 0.2).toFixed(2); // "0.30"<br>Math.round((0.1 + 0.2) * 100) / 100; // 0.3<br> |
-| **Async/Await Errors** | **Why**: Forgot try/catch or await<br><br>**Solution**: Always handle errors | javascript<br>// Problem<br>async function getData() {<br>  const data = await fetch('/api');<br>  // unhandled rejection<br>}<br><br>// Solution<br>async function getData() {<br>  try {<br>    const data = await fetch('/api');<br>    return data;<br>  } catch (error) {<br>    console.error('Failed:', error);<br>    throw error;<br>  }<br>}<br> |
+| **Definition**  | Block-scoped variable declarations.                              |
+| --------------- | ---------------------------------------------------------------- |
+| **When to Use** | Always use `const` unless you plan to reassign with `let`.       |
+| **Remarks**     | Never use `var`. `const` is default; `let` for mutable bindings. |
+
+```javascript
+const MAX = 100;   // constant
+let count = 0;     // mutable
+
+if (true) {
+  let localVar = 'inside block';
+  const another = 'still inside block';
+}
+
+// console.log(localVar); // ReferenceError
+```
 
 ---
 
-## **PERFORMANCE OPTIMIZATION**
+### **Arrow Functions**
 
-| Technique | Definition & Usage | Example |
-|-----------|-------------------|---------|
-| **Lazy Loading** | **Definition**: Load resources on demand<br><br>**When to Use**: Images, modules, routes, large data<br><br>**Remarks**: Improves initial load. Load only what's needed. Reduces bundle size. Common in SPAs. Browser native for images. | javascript<br>// Dynamic import<br>const module = await import('./heavy-module.js');<br><br>// React lazy<br>const LazyComponent = React.lazy(() => {<br>  return import('./Component.js');<br>});<br><br>// Image lazy loading<br><img loading="lazy" src="image.jpg" /><br> |
-| **Web Workers** | **Definition**: Run scripts in background thread<br><br>**When to Use**: Heavy computations, data processing<br><br>**Remarks**: Doesn't block UI. No DOM access. Use for CPU-intensive tasks. Overhead in data transfer. Parallel processing. | javascript<br>// main.js<br>const worker = new Worker('worker.js');<br><br>worker.postMessage({ data: largeArray });<br><br>worker.onmessage = (e) => {<br>  console.log('Result:', e.data);<br>};<br><br>// worker.js<br>self.onmessage = (e) => {<br>  const result = processData(e.data);<br>  self.postMessage(result);<br>};<br> |
-| **requestAnimationFrame** | **Definition**: Schedule visual updates<br><br>**When to Use**: Animations, smooth scrolling<br><br>**Remarks**: Syncs with browser refresh. Pauses in inactive tabs. Better than setInterval for animations. 60 FPS. | javascript<br>function animate() {<br>  // Update animation state<br>  element.style.transform =<br>    `translateX(${x}px)`;<br>  x += 1;<br><br>  if (x < 500) {<br>    requestAnimationFrame(animate);<br>  }<br>}<br><br>requestAnimationFrame(animate);<br> |
+| **Definition**  | Short syntax for writing functions.                         |
+| --------------- | ----------------------------------------------------------- |
+| **When to Use** | Inline functions, callbacks, React components.              |
+| **Remarks**     | Lexical `this`, no `arguments`, not usable as constructors. |
+
+```javascript
+// Single param
+const square = x => x * x;
+
+// Multiple params
+const add = (a, b) => a + b;
+
+// Block body
+const compute = x => {
+  const double = x * 2;
+  return double + 1;
+};
+
+// Return object
+const createUser = name => ({
+  name,
+  active: true
+});
+```
 
 ---
+
+### **Spread / Rest**
+
+| **Definition**  | Spread (`...`) expands. Rest (`...`) collects.       |
+| --------------- | ---------------------------------------------------- |
+| **When to Use** | Copying, merging, variadic functions, destructuring. |
+| **Remarks**     | Rest must be last in parameter list. Shallow copy.   |
+
+```javascript
+// Spread
+const copy = [...arr];
+const combined = [...arr1, ...arr2];
+const userUpdated = { ...user, role: 'admin' };
+
+// Rest
+function sum(...nums) {
+  return nums.reduce((a, b) => a + b);
+}
+
+// Destructuring with rest
+const [first, ...others] = [1, 2, 3, 4];
+const { name, ...rest } = user;
+```
+
+---
+
+### **Map / Set**
+
+| **Definition**  | ES6 collections for key-value and unique values.                      |
+| --------------- | --------------------------------------------------------------------- |
+| **When to Use** | Map: complex keys, ordered entries. Set: uniqueness.                  |
+| **Remarks**     | Both iterable. Map keys can be any type. Set auto-removes duplicates. |
+
+```javascript
+// Set
+const set = new Set([1, 2, 2, 3]); // {1, 2, 3}
+set.add(4);
+set.has(2); // true
+
+// Map
+const map = new Map();
+map.set('name', 'Alice');
+map.set({ id: 1 }, 'value');
+console.log(map.get('name')); // 'Alice'
+
+// Iterating Map
+for (const [key, value] of map) {
+  console.log(key, value);
+}
+```
+
+---
+
+### **for...of**
+
+| **Definition**  | Loop over values in iterables (arrays, strings, etc.).                |
+| --------------- | --------------------------------------------------------------------- |
+| **When to Use** | Cleaner alternative to `for` or `forEach` on iterables.               |
+| **Remarks**     | Use `for...in` only for object keys. Use `Object.keys()` for objects. |
+
+```javascript
+// Array
+for (const num of [1, 2, 3]) {
+  console.log(num);
+}
+
+// String
+for (const char of 'hello') {
+  console.log(char);
+}
+
+// Map
+for (const [key, val] of map) {
+  console.log(key, val);
+}
+
+// With break/continue
+for (const item of items) {
+  if (item > 10) break;
+  console.log(item);
+}
+```
+
+---
+
+✅ Let me know if you’d like:
+
+* A **PDF/Markdown** version of all cheat sheets combined
+* A **poster-style layout** for printing
+* Flashcard format for **practice/memory testing**
+
+Ready when you are.
+
+Here’s your **DEBUGGING & TESTING** reference, formatted in the same clean, modular style for fast scanning and practical application:
+
+---
+
+# 🧪 **DEBUGGING & TESTING QUICK REFERENCE**
+
+---
+
+### **`console.log()`**
+
+| **Definition**  | Print values to the console.                                                  |
+| --------------- | ----------------------------------------------------------------------------- |
+| **When to Use** | Basic debugging, value inspection.                                            |
+| **Remarks**     | Simple, widely used. Object shorthand improves clarity. Remove in production. |
+
+```javascript
+console.log('value:', x);
+
+// Multiple values
+console.log('User:', user, 'Count:', count);
+
+// Object shorthand
+console.log({ user, posts, comments });
+
+// Styled output
+console.log('%c Important!', 'color: red; font-size: 20px');
+```
+
+---
+
+### **`console.table()`**
+
+| **Definition**  | Display arrays or objects as a formatted table.                   |
+| --------------- | ----------------------------------------------------------------- |
+| **When to Use** | Inspecting structured or tabular data.                            |
+| **Remarks**     | Great for arrays of objects. Select specific columns for clarity. |
+
+```javascript
+const users = [
+  { id: 1, name: 'Alice', age: 30 },
+  { id: 2, name: 'Bob', age: 25 },
+  { id: 3, name: 'Charlie', age: 35 }
+];
+
+console.table(users);
+
+// Specific columns
+console.table(users, ['name', 'age']);
+```
+
+---
+
+### **`debugger`**
+
+| **Definition**  | Pause execution and enter debug mode in DevTools.                      |
+| --------------- | ---------------------------------------------------------------------- |
+| **When to Use** | Deep inspection, complex logic, step-by-step debugging.                |
+| **Remarks**     | Breakpoint inserted in code. Use conditionally. Remove for production. |
+
+```javascript
+function calculate(x, y) {
+  debugger; // Pauses here
+  return x * y + 10;
+}
+
+// Conditional pause
+if (user.role === 'admin') {
+  debugger;
+}
+```
+
+---
+
+### **`console.assert()`**
+
+| **Definition**  | Log message if condition is false.                                    |
+| --------------- | --------------------------------------------------------------------- |
+| **When to Use** | Validation, sanity checks in dev.                                     |
+| **Remarks**     | No interruption; logs only on failure. Useful for inline assumptions. |
+
+```javascript
+console.assert(x > 0, 'x must be positive');
+
+console.assert(Array.isArray(data), 'data must be an array');
+
+function divide(a, b) {
+  console.assert(b !== 0, 'Division by zero!');
+  return a / b;
+}
+```
+
+---
+
+### **`console.trace()`**
+
+| **Definition**  | Logs the call stack leading to current function.          |
+| --------------- | --------------------------------------------------------- |
+| **When to Use** | Understand call paths and debugging indirect calls.       |
+| **Remarks**     | Shows the full function call chain. Call origin tracking. |
+
+```javascript
+function a() { b(); }
+function b() { c(); }
+function c() {
+  console.trace('How did we get here?');
+}
+
+a(); // Outputs: c → b → a → global
+```
+
+---
+
+### **Performance Measurement**
+
+| **Definition**  | Measure and log execution time.                                           |
+| --------------- | ------------------------------------------------------------------------- |
+| **When to Use** | Finding slow code and performance bottlenecks.                            |
+| **Remarks**     | Use `console.time()` for rough timing, `performance.now()` for precision. |
+
+```javascript
+// console.time / timeEnd
+console.time('operation');
+expensiveOperation();
+console.timeEnd('operation'); // Logs: operation: 234ms
+
+// performance.now() (high resolution)
+const start = performance.now();
+doSomething();
+const end = performance.now();
+console.log(`Took ${end - start}ms`);
+
+// Multiple timings
+console.time('fetch');
+await fetchData();
+console.timeEnd('fetch');
+
+console.time('process');
+processData();
+console.timeEnd('process');
+```
+
+---
+
+✅ Let me know if you want:
+
+* A **combined PDF** of all cheat sheets
+* A **print-friendly version**
+* A **flashcard-style** layout for revision
+
+Happy to package this for whatever use you have in mind.
+
+Here’s the **COMMON GOTCHAS & PITFALLS** quick reference formatted cleanly for easy scanning and practical use:
+
+---
+
+# ⚠️ **COMMON GOTCHAS & PITFALLS QUICK REFERENCE**
+
+---
+
+### **Type Coercion**
+
+| **Why It Happens** | `==` performs type conversion which can lead to unexpected truthy results. |
+| ------------------ | -------------------------------------------------------------------------- |
+| **Solution**       | Always use strict equality `===` to avoid coercion surprises.              |
+
+```javascript
+// Bad (coercion)
+0 == false;   // true
+"" == false;  // true
+
+// Good (strict)
+0 === false;  // false
+"" === false; // false
+```
+
+---
+
+### **`this` Binding**
+
+| **Why It Happens** | `this` depends on the calling context, often lost in callbacks. |
+| ------------------ | --------------------------------------------------------------- |
+| **Solution**       | Use arrow functions or `.bind()` to preserve correct `this`.    |
+
+```javascript
+const obj = {
+  name: 'Test',
+  greet: function() {
+    // Problem: `this` lost inside regular function
+    setTimeout(function() {
+      console.log(this.name); // undefined
+    }, 100);
+  },
+
+  greetFixedArrow: function() {
+    setTimeout(() => {
+      console.log(this.name); // 'Test'
+    }, 100);
+  },
+
+  greetFixedBind: function() {
+    setTimeout(function() {
+      console.log(this.name); // 'Test'
+    }.bind(this), 100);
+  }
+};
+```
+
+---
+
+### **Array/Object Mutation**
+
+| **Why It Happens** | Arrays/objects are assigned by reference, not copied, leading to mutations.      |
+| ------------------ | -------------------------------------------------------------------------------- |
+| **Solution**       | Use spread (`...`) or proper deep copy methods (like `structuredClone`) to copy. |
+
+```javascript
+// Problem (mutation)
+const original = [1, 2, 3];
+const copy = original;
+copy.push(4);
+console.log(original); // [1, 2, 3, 4] — original mutated!
+
+// Solution (shallow copy)
+const copyShallow = [...original];
+
+// Solution (deep copy)
+const deepCopy = structuredClone(original);
+```
+
+---
+
+### **Floating Point Precision**
+
+| **Why It Happens** | Binary floating point cannot exactly represent decimals.           |
+| ------------------ | ------------------------------------------------------------------ |
+| **Solution**       | Use rounding (`toFixed`, `Math.round`) or libraries for precision. |
+
+```javascript
+// Problem
+0.1 + 0.2; // 0.30000000000000004
+
+// Solution
+(0.1 + 0.2).toFixed(2);          // "0.30"
+Math.round((0.1 + 0.2) * 100)/100; // 0.3
+```
+
+---
+
+### **Async/Await Errors**
+
+| **Why It Happens** | Forgetting to use `try/catch` for error handling or omitting `await`. |
+| ------------------ | --------------------------------------------------------------------- |
+| **Solution**       | Always wrap async calls in `try/catch` blocks to handle errors.       |
+
+```javascript
+// Problem: unhandled rejection
+async function getData() {
+  const data = await fetch('/api');
+}
+
+// Solution: handle errors properly
+async function getData() {
+  try {
+    const data = await fetch('/api');
+    return data;
+  } catch (error) {
+    console.error('Failed:', error);
+    throw error;
+  }
+}
+```
+
+---
+
+✅ Want me to package these cheat sheets for you?
+Or create more like this? Just ask!
+
+Here’s your **PERFORMANCE OPTIMIZATION** quick reference formatted clearly and practically:
+
+---
+
+# 🚀 **PERFORMANCE OPTIMIZATION QUICK REFERENCE**
+
+---
+
+### **Lazy Loading**
+
+| **Definition & Usage** | Load resources only when needed to improve initial load times and reduce bundle size. Ideal for images, modules, routes, and large data. Common in Single Page Applications (SPAs). Browsers support native lazy loading for images. |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+
+```javascript
+// Dynamic import for modules
+const module = await import('./heavy-module.js');
+
+// React lazy loading
+const LazyComponent = React.lazy(() => import('./Component.js'));
+
+// Native image lazy loading (HTML)
+<img loading="lazy" src="image.jpg" alt="Lazy loaded image" />
+```
+
+---
+
+### **Web Workers**
+
+| **Definition & Usage** | Run scripts in a background thread to offload heavy computations or data processing without blocking the UI. Cannot access DOM directly. Great for CPU-intensive tasks but comes with data transfer overhead. Enables parallel processing. |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+
+```javascript
+// main.js
+const worker = new Worker('worker.js');
+
+worker.postMessage({ data: largeArray });
+
+worker.onmessage = (e) => {
+  console.log('Result:', e.data);
+};
+
+// worker.js
+self.onmessage = (e) => {
+  const result = processData(e.data);
+  self.postMessage(result);
+};
+```
+
+---
+
+### **requestAnimationFrame**
+
+| **Definition & Usage** | Schedule animation or visual updates synced with the browser’s refresh rate (~60fps). Better than setInterval for smooth animations and scrolling. Automatically pauses in inactive tabs to save resources. |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+
+```javascript
+function animate() {
+  // Update animation state
+  element.style.transform = `translateX(${x}px)`;
+  x += 1;
+
+  if (x < 500) {
+    requestAnimationFrame(animate);
+  }
+}
+
+requestAnimationFrame(animate);
+```
+
+---
+
+✅ Need more optimization tips or examples? Just say the word!
 
 ## **QUICK TIPS & BEST PRACTICES**
 
