@@ -1210,6 +1210,52 @@ const safeUndefined = void 0;
 
 ---
 
+### **Unary Plus/Minus**
+| **Definition**  | Converts operand to number (`+`) or negates it (`-`).             |
+| --------------- | ----------------------------------------------------------------- |
+| **When to Use** | Quick number conversion, negation.                                 |
+| **Remarks**     | `+` is shorthand for `Number()`. Useful for parsing.              |
+
+```javascript
+// Unary plus (converts to number)
++"42";           // 42
++true;           // 1
++false;          // 0
++"";             // 0
++"abc";          // NaN
+
+// Unary minus (negates)
+-5;              // -5
+-"10";           // -10
+
+// Practical use
+const str = "123";
+const num = +str;  // 123 (quick conversion)
+```
+
+---
+
+### **Logical NOT (!)**
+| **Definition**  | Inverts boolean value (truthy → false, falsy → true).            |
+| --------------- | ----------------------------------------------------------------- |
+| **When to Use** | Boolean inversion, double negation for coercion.                   |
+| **Remarks**     | Double `!!` converts to boolean. Common pattern.                  |
+
+```javascript
+!true;           // false
+!false;          // true
+!0;              // true
+!"";             // true
+!"text";         // false
+
+// Double negation (convert to boolean)
+!!1;             // true
+!!"";            // false
+!!null;          // false
+```
+
+---
+
 ---
 
 ---
@@ -1358,6 +1404,8 @@ function outer() {
 }
 ```
 ---
+
+
 ### **Closure**
 
 | **Definition**  | Function that retains access to outer scope variables after outer function returns. |
@@ -1403,6 +1451,33 @@ function setupButton() {
 ---
 
 ---
+
+---
+### **IIFE and Scope Isolation**
+| **Definition**  | Pattern using IIFE to create private scope.                       |
+| --------------- | ----------------------------------------------------------------- |
+| **When to Use** | Module pattern, avoiding global pollution, one-time initialization.|
+| **Remarks**     | Less common with ES6 modules but still useful pattern.            |
+
+```javascript
+// Classic IIFE pattern
+(function() {
+  const privateVar = "can't access outside";
+  console.log("Runs immediately");
+})();
+
+// With parameters
+(function(global, $) {
+  const config = { theme: 'dark' };
+  // Use global and $
+})(window, jQuery);
+
+// Arrow IIFE
+(() => {
+  const temp = "temporary";
+  console.log(temp);
+})();
+```
 
 ---
 
@@ -1904,6 +1979,82 @@ queue.shift(); // 1
 
 ---
 
+
+### **at()**
+| **Definition**  | Access array element by index, supports negative indexing.        |
+| --------------- | ----------------------------------------------------------------- |
+| **When to Use** | Getting last element, negative indexing, cleaner than `[length-1]`.|
+| **Remarks**     | ES2022 feature. Returns `undefined` if index out of bounds.       |
+
+```javascript
+const arr = [1, 2, 3, 4, 5];
+
+arr.at(0);    // 1 (first)
+arr.at(-1);   // 5 (last)
+arr.at(-2);   // 4 (second to last)
+
+// vs traditional
+arr[arr.length - 1];  // 5 (old way)
+arr.at(-1);           // 5 (cleaner)
+```
+
+---
+
+### **fill()**
+| **Definition**  | Fills array elements with a static value.                         |
+| --------------- | ----------------------------------------------------------------- |
+| **When to Use** | Initializing arrays, resetting values, creating test data.        |
+| **Remarks**     | Mutates original array. Accepts start and end indices.            |
+
+```javascript
+const arr = [1, 2, 3, 4, 5];
+arr.fill(0);           // [0, 0, 0, 0, 0]
+
+arr.fill(9, 2, 4);     // [0, 0, 9, 9, 0]
+
+// Creating array with default values
+const zeros = new Array(5).fill(0);  // [0, 0, 0, 0, 0]
+```
+
+---
+
+### **copyWithin()**
+| **Definition**  | Copies part of array to another location within same array.       |
+| --------------- | ----------------------------------------------------------------- |
+| **When to Use** | In-place array manipulation, performance-critical operations.      |
+| **Remarks**     | Mutates original. Rarely used. Useful for buffer operations.      |
+
+```javascript
+const arr = [1, 2, 3, 4, 5];
+
+// Copy elements from index 3 to index 0
+arr.copyWithin(0, 3);  // [4, 5, 3, 4, 5]
+
+// Copy from index 0 to 2, paste at index 2
+[1, 2, 3, 4, 5].copyWithin(2, 0, 2);  // [1, 2, 1, 2, 5]
+```
+
+---
+
+### **lastIndexOf()**
+| **Definition**  | Returns last index of element, or -1 if not found.               |
+| --------------- | ----------------------------------------------------------------- |
+| **When to Use** | Finding last occurrence, checking duplicates from end.             |
+| **Remarks**     | Searches backwards. Accepts optional start position.              |
+
+```javascript
+const arr = [1, 2, 3, 2, 1];
+
+arr.lastIndexOf(2);      // 3 (last occurrence)
+arr.lastIndexOf(1);      // 4
+arr.lastIndexOf(5);      // -1 (not found)
+
+// With start position (search backwards from index 2)
+arr.lastIndexOf(2, 2);   // 1
+```
+
+---
+
 # ⚠️ **ERROR HANDLING**
 
 ---
@@ -2265,6 +2416,73 @@ button.setAttribute('aria-label', 'Close menu');
 ---
 
 
+
+### **innerHTML vs textContent vs innerText**
+| **Definition**  | Different ways to get/set element content.                        |
+| --------------- | ----------------------------------------------------------------- |
+| **When to Use** | `innerHTML` for HTML, `textContent` for text, `innerText` rarely.|
+| **Remarks**     | Security: sanitize before using `innerHTML`. XSS risk.            |
+
+```javascript
+const div = document.querySelector('div');
+
+// innerHTML - parses HTML
+div.innerHTML = '<strong>Bold</strong>';  // Renders as bold
+
+// textContent - plain text only (faster)
+div.textContent = '<strong>Bold</strong>'; // Shows as text
+
+// innerText - considers styling (slower)
+div.innerText = 'Text';  // Respects CSS visibility
+
+// Reading
+div.innerHTML;    // "<strong>Bold</strong>"
+div.textContent;  // "Bold"
+
+// XSS Prevention
+const userInput = '<script>alert("XSS")</script>';
+// BAD:
+div.innerHTML = userInput;  // Executes script!
+// GOOD:
+div.textContent = userInput; // Safe, shows as text
+```
+
+---
+
+### **Event Delegation**
+| **Definition**  | Attach single listener to parent instead of multiple to children. |
+| --------------- | ------------------------------------------------------------------ |
+| **When to Use** | Dynamic lists, performance, many similar elements.                  |
+| **Remarks**     | Uses event bubbling. Check `event.target` for actual element.      |
+
+```javascript
+// Bad: Multiple listeners
+items.forEach(item => {
+  item.addEventListener('click', handleClick);
+});
+
+// Good: Single delegated listener
+list.addEventListener('click', (e) => {
+  if (e.target.matches('.item')) {
+    handleClick(e.target);
+  }
+});
+
+// Real-world example
+document.getElementById('todo-list').addEventListener('click', (e) => {
+  const target = e.target;
+  
+  if (target.matches('.delete-btn')) {
+    deleteTodo(target.closest('.todo-item'));
+  }
+  
+  if (target.matches('.edit-btn')) {
+    editTodo(target.closest('.todo-item'));
+  }
+});
+```
+
+---
 
 ### **try / catch**
 
@@ -2835,6 +3053,69 @@ console.log(config); // Already loaded
 // Dynamic import
 const module = await import('./utils.js');
 module.doSomething();
+```
+
+---
+### **Destructuring Assignment**
+| **Definition**  | Already covered but worth expanding parameter destructuring.       |
+| --------------- | ------------------------------------------------------------------ |
+| **When to Use** | Function parameters, swap values, extracting from returns.          |
+| **Remarks**     | Combine with defaults for powerful patterns.                        |
+
+```javascript
+// Swap without temp variable
+let a = 1, b = 2;
+[a, b] = [b, a];  // a=2, b=1
+
+// Function parameter destructuring
+function createUser({ 
+  name, 
+  age = 18, 
+  role = 'user',
+  ...settings 
+}) {
+  return { name, age, role, settings };
+}
+
+// Nested destructuring
+const user = {
+  info: {
+    personal: { name: 'Alice', age: 30 },
+    contact: { email: 'a@b.com' }
+  }
+};
+
+const { info: { personal: { name } } } = user;
+```
+
+---
+
+### **String Methods (ES6+)**
+| **Definition**  | Modern string utility methods.                                     |
+| --------------- | ------------------------------------------------------------------ |
+| **When to Use** | String manipulation, validation, formatting.                        |
+| **Remarks**     | More readable than regex for simple cases.                         |
+
+```javascript
+// startsWith / endsWith / includes
+const str = "Hello World";
+str.startsWith("Hello");   // true
+str.endsWith("World");     // true
+str.includes("lo");        // true
+
+// repeat
+"ha".repeat(3);            // "hahaha"
+
+// padStart / padEnd (ES2017)
+"5".padStart(3, "0");      // "005"
+"5".padEnd(3, "0");        // "500"
+
+// trimStart / trimEnd (ES2019)
+"  hello  ".trimStart();   // "hello  "
+"  hello  ".trimEnd();     // "  hello"
+
+// replaceAll (ES2021)
+"a-b-c".replaceAll("-", "_");  // "a_b_c"
 ```
 
 ---
@@ -3780,6 +4061,30 @@ async function getData() {
 Or create more like this? Just ask!
 
 Here’s your **PERFORMANCE OPTIMIZATION** quick reference formatted clearly and practically:
+
+---
+### **Reference vs Value**
+| **Why It Happens** | Primitives copied by value, objects by reference.            |
+| ------------------ | ------------------------------------------------------------ |
+| **Solution**       | Be aware when passing objects to functions or assigning.      |
+
+```javascript
+// Primitives (by value)
+let a = 5;
+let b = a;
+b = 10;
+console.log(a);  // 5 (unchanged)
+
+// Objects (by reference)
+let obj1 = { x: 5 };
+let obj2 = obj1;
+obj2.x = 10;
+console.log(obj1.x);  // 10 (changed!)
+
+// Solution: clone
+let obj3 = { ...obj1 };      // shallow
+let obj4 = structuredClone(obj1);  // deep
+```
 
 ---
 
