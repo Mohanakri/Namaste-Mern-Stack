@@ -206,6 +206,40 @@ parseFloat("3.14");   // 3.14
 
 
 ---
+### **WeakMap / WeakSet**
+
+| **Definition**  | Collections with weak references that allow garbage collection.   |
+| --------------- | ----------------------------------------------------------------- |
+| **When to Use** | Private data, metadata, avoiding memory leaks.                    |
+| **Remarks**     | Keys must be objects. Not enumerable. Automatically collected.    |
+
+```javascript
+// WeakMap - private data pattern
+const privateData = new WeakMap();
+
+class User {
+  constructor(name) {
+    privateData.set(this, { password: 'secret' });
+    this.name = name;
+  }
+  
+  getPassword() {
+    return privateData.get(this).password;
+  }
+}
+
+// WeakSet - tracking objects
+const visitedNodes = new WeakSet();
+function traverse(node) {
+  if (visitedNodes.has(node)) return;
+  visitedNodes.add(node);
+  // process node...
+}
+```
+
+---
+
+---
 
 
 # 🧩 **FUNCTIONS**
@@ -1030,7 +1064,155 @@ const final = false || null || "last"; // "last"
 ```
 
 ---
+### **Comma Operator**
 
+| **Definition**  | Evaluates multiple expressions and returns the last one.      |
+| --------------- | ------------------------------------------------------------- |
+| **When to Use** | Multiple operations in one statement (rarely used).           |
+| **Remarks**     | Evaluates left to right. Mostly in for loops. Use sparingly.  |
+
+```javascript
+let x = (1 + 2, 3 + 4); // x = 7
+
+// In for loops
+for (let i = 0, j = 10; i < j; i++, j--) {
+  console.log(i, j);
+}
+
+// Multiple assignments
+let a, b;
+(a = 1, b = 2); // a = 1, b = 2
+```
+
+---
+
+### **Exponentiation (`**`)**
+
+| **Definition**  | Raises left operand to the power of right operand.           |
+| --------------- | ------------------------------------------------------------- |
+| **When to Use** | Mathematical calculations, cleaner than `Math.pow()`.         |
+| **Remarks**     | ES2016 feature. Right-associative. Has assignment `**=`.      |
+
+```javascript
+2 ** 3;        // 8
+2 ** 3 ** 2;   // 512 (right-associative: 2 ** (3 ** 2))
+
+let x = 2;
+x **= 3;       // x = 8
+
+// Alternative
+Math.pow(2, 3); // 8 (older way)
+```
+
+---
+
+### **Bitwise Operators**
+
+| **Definition**  | Perform bit-level operations on integers.                     |
+| --------------- | ------------------------------------------------------------- |
+| **When to Use** | Low-level operations, flags, permissions, optimizations.      |
+| **Remarks**     | Converts to 32-bit integers. Fast but less readable.          |
+
+```javascript
+// AND, OR, XOR, NOT
+5 & 3;    // 1 (0101 & 0011)
+5 | 3;    // 7 (0101 | 0011)
+5 ^ 3;    // 6 (0101 ^ 0011)
+~5;       // -6 (inverts bits)
+
+// Shift operators
+5 << 1;   // 10 (left shift)
+5 >> 1;   // 2 (right shift)
+-5 >>> 1; // 2147483645 (unsigned right shift)
+
+// Practical use: checking flags
+const READ = 1;    // 0001
+const WRITE = 2;   // 0010
+const EXECUTE = 4; // 0100
+
+let permissions = READ | WRITE; // 0011
+if (permissions & WRITE) {
+  console.log('Can write');
+}
+```
+
+---
+
+### **in Operator**
+
+| **Definition**  | Checks if property exists in object or prototype chain.       |
+| --------------- | ------------------------------------------------------------- |
+| **When to Use** | Checking property existence, iterating keys, array indices.   |
+| **Remarks**     | Different from `hasOwnProperty()`. Checks prototype chain.    |
+
+```javascript
+const obj = { name: 'Alice', age: 30 };
+
+'name' in obj;        // true
+'toString' in obj;    // true (inherited)
+'missing' in obj;     // false
+
+// Array
+const arr = [1, 2, 3];
+0 in arr;             // true (index exists)
+5 in arr;             // false
+
+// vs hasOwnProperty
+obj.hasOwnProperty('name');     // true
+obj.hasOwnProperty('toString'); // false (inherited)
+```
+
+---
+
+### **delete Operator**
+
+| **Definition**  | Removes property from object.                                 |
+| --------------- | ------------------------------------------------------------- |
+| **When to Use** | Dynamic property removal (use cautiously for performance).    |
+| **Remarks**     | Returns boolean. Can't delete variables. Avoid in hot paths.  |
+
+```javascript
+const obj = { name: 'Alice', age: 30 };
+
+delete obj.age;     // true
+console.log(obj);   // { name: 'Alice' }
+
+// Can't delete variables
+let x = 5;
+delete x;           // false (in strict mode: error)
+
+// Array (creates hole, doesn't change length)
+const arr = [1, 2, 3];
+delete arr[1];
+console.log(arr);   // [1, empty, 3]
+console.log(arr.length); // 3
+```
+
+---
+
+### **void Operator**
+
+| **Definition**  | Evaluates expression and returns `undefined`.                 |
+| --------------- | ------------------------------------------------------------- |
+| **When to Use** | Getting `undefined` safely, preventing return values.         |
+| **Remarks**     | Rarely used. Mostly seen in `javascript:void(0)` links.       |
+
+```javascript
+void 0;           // undefined
+void (1 + 1);     // undefined
+
+// In links (prevents navigation)
+<a href="javascript:void(0)">Click</a>
+
+// Safe undefined
+const safeUndefined = void 0;
+```
+
+---
+
+---
+
+---
 ### **typeof**
 
 | **Definition**  | Returns the type of the operand as a string.                                                     |
@@ -1175,6 +1357,52 @@ function outer() {
   // console.log(y); // Error: y is not defined
 }
 ```
+---
+### **Closure**
+
+| **Definition**  | Function that retains access to outer scope variables after outer function returns. |
+| --------------- | ------------------------------------------------------------------------------------ |
+| **When to Use** | Data privacy, factory functions, callbacks, event handlers.                          |
+| **Remarks**     | Core JavaScript concept. Enables module pattern, currying, memoization.              |
+
+```javascript
+// Basic closure
+function outer(x) {
+  return function inner(y) {
+    return x + y; // inner has access to x
+  };
+}
+
+const add5 = outer(5);
+add5(3); // 8
+
+// Private variables
+function createCounter() {
+  let count = 0; // private
+  
+  return {
+    increment: () => ++count,
+    decrement: () => --count,
+    getCount: () => count
+  };
+}
+
+const counter = createCounter();
+counter.increment(); // 1
+// counter.count; // undefined (private)
+
+// Event handlers
+function setupButton() {
+  const color = 'red';
+  button.addEventListener('click', () => {
+    element.style.color = color; // closure over color
+  });
+}
+```
+
+---
+
+---
 
 ---
 
@@ -1415,6 +1643,38 @@ const missing = users.find(u => u.id === 99);
 ```
 
 ---
+### **findIndex() / findLastIndex()**
+
+| **Definition**  | Returns index of first/last element matching condition.       |
+| --------------- | ------------------------------------------------------------- |
+| **When to Use** | Finding position for updates, deletions, insertions.          |
+| **Remarks**     | Returns -1 if not found. `findLastIndex()` is ES2023.         |
+
+```javascript
+const users = [
+  { id: 1, name: 'Alice' },
+  { id: 2, name: 'Bob' },
+  { id: 3, name: 'Charlie' }
+];
+
+const index = users.findIndex(u => u.id === 2); // 1
+const missing = users.findIndex(u => u.id === 99); // -1
+
+// findLastIndex (ES2023)
+const arr = [1, 2, 3, 2, 1];
+arr.findLastIndex(x => x === 2); // 3
+
+// Use case: update by condition
+const idx = users.findIndex(u => u.name === 'Bob');
+if (idx !== -1) {
+  users[idx].active = true;
+}
+```
+
+---
+
+---
+
 
 ### **some()**
 
