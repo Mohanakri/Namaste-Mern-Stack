@@ -1,5 +1,7 @@
 ## My topics
 
+
+
 * Primitive values
 Simple, immutable data types like numbers, strings, and booleans. Their value cannot be changed, only replaced. ex: string,int,boolen,null etc.,
 
