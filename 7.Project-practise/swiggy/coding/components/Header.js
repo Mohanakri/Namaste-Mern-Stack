@@ -1,33 +1,27 @@
-import Body, {Body1} from "./Body";
 
-
-const Header_name = ({name})=> {
-  
-  return (
-    <p> checking props</p>
-  )
-}
 
 
 
 const Header = () => {
   const company_name = 'okay getting props'
   return (    
-    <div className=" flex ">
-      <p className="pa text-blue-500 text-xl font-semibold bg-gray-100 p-4 rounded-lg shadow-md">
-      Hi, how are you?
-      </p>
-      <div className=" flex justify-between">
-        <div>My Hotel</div> 
-        <div>Search</div>
-        <div>Offers</div>
-        <div>Help</div>
-        <div>Sign in</div>
-        <div>cart</div>
+    <div className="flex items-center justify-between bg-gray-100 px-8 py-4 shadow-md">
 
-      </div>
+  <div className="text-2xl font-bold text-blue-600 cursor-pointer">
+    Business
+  </div>
 
-    </div>
+
+  <div className="flex space-x-6 text-gray-700 font-medium">
+    <div className=" cursor-pointer">My Hotel</div>
+    <div className=" cursor-pointer">Search</div>
+    <div className=" cursor-pointer">Offers</div>
+    <div className=" cursor-pointer">Help</div>
+    <div className=" cursor-pointer">Sign In</div>
+    <div className=" cursor-pointer">Cart</div>
+  </div>
+</div>
+
     
     
   );
