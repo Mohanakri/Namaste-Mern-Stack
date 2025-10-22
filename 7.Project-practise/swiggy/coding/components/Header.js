@@ -13,16 +13,19 @@ const Header_name = ({name})=> {
 const Header = () => {
   const company_name = 'okay getting props'
   return (    
-    <div className=" inline-block ">
+    <div className=" flex ">
       <p className="pa text-blue-500 text-xl font-semibold bg-gray-100 p-4 rounded-lg shadow-md">
       Hi, how are you?
       </p>
-      <div>My Hotel</div> 
-      <div>Search</div>
-      <div>Offers</div>
-      <div>Help</div>
-      <div>Sign in</div>
-      <div>cart</div>
+      <div className=" flex justify-between">
+        <div>My Hotel</div> 
+        <div>Search</div>
+        <div>Offers</div>
+        <div>Help</div>
+        <div>Sign in</div>
+        <div>cart</div>
+
+      </div>
 
     </div>
     
