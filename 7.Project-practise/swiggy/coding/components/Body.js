@@ -1,62 +1,49 @@
-//import Restcard from 'Restcard'
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
+import {SWIGGY_API_URL , CLOUDINARY_BASE_URL} from '../utility/values';
 
 const Restcard = () => {
+  const [carddata, setcarddata] = useState(null);
 
- 
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await fetch(SWIGGY_API_URL);
+      const data = await res.json();
+      setcarddata(data);
+    };
 
- const [carddata, setcarddata] = useState(0);
+    fetchData();
+  }, []);
 
+  const restaurantName =
+    carddata?.data?.cards?.[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants || [];
 
-  //console.log(carddata);
-  useEffect (()=>{
-       const fetchData = async () => {
-        const res = await fetch(
-          'https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9804517&lng=77.746281&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING'
-        );
-        const data = await res.json();
-        
-        setcarddata(data);
+  console.log(restaurantName); // for debugging
 
-      };
-
-    fetchData(); 
-  },[]
-  );
-  const test = 
-  console.log(carddata);
-  const restaurantName = carddata?.data?.cards?.[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants; //.[0]?.info?.name;
-  
-  console.log(restaurantName); 
-
-
-    
   return (
-    <div className="flex flex-wrap gap-4">
-      {restaurantName?.map((ok, index) => (
-        <div key={index} className="border w-40 p-2">
-          <div className="h-24 bg-gray-200 flex items-center justify-center">
-            image
+    <div className="flex flex-wrap gap-4 p-4">
+      {restaurantName.map((ok, index) => {
+        const imgid = ok?.info?.cloudinaryImageId;
+        const url = `${CLOUDINARY_BASE_URL}${imgid}`;
+        console.log(url); // verify image URL in console
+
+        return (
+          <div key={index} className="border w-48 p-2 shadow rounded-lg">
+            <img
+              src={url}
+              alt={ok?.info?.name}
+              className="h-32 w-full object-cover rounded-md"
+            />
+            <div className="font-semibold mt-2">{ok?.info?.name}</div>
+            <div>{ok?.info?.avgRating} ⭐</div>
           </div>
-          <img src="/Photos/Logo.png" alt="logo" className="my-2" />
-          <div>{ok?.info?.name}</div>
-          <div>{ok?.info?.avgRating}</div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
-
-}
-
-
-
-
+};
 
 const Body = () => {
-
-  return (
-    <Restcard />
-  )
-}
+  return <Restcard />;
+};
 
 export default Body;
