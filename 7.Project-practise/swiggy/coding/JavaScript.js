@@ -11,12 +11,16 @@ import Body from './components/Body'
 
 const AppLayout = () => {
   return (
-    <>
+    <div>
     <Header />
-    <Body />
+    <div className=' justify-center'>
+      <Body />
+
+    </div>
+    
     
 
-    </>
+    </div>
   )
 }
 
