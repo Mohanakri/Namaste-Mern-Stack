@@ -1,3 +1,15 @@
+# Mdn docs for referance
+
+* https://developer.mozilla.org/en-US/docs/Web/HTML/Guides/Cheatsheet
+
+
+
+
+
+
+
+
+
 Perfect — let’s make this **practical and developer-friendly** for React.
 Below is a **section-wise guide** covering *all major HTML elements* and how they’re represented as **React elements**, including the **most commonly used attributes** in frontend development — plus **one working example per section**.
 
