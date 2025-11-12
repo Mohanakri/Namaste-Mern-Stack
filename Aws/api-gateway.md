@@ -1,0 +1,2 @@
+* prompts:
+  Explain AWS API Gateway integration types — focusing on Lambda proxy vs non-proxy integration — including their internal flow, data mapping behavior, CORS handling, OPTIONS method purpose, and where Method Response and Integration Response fit in.
